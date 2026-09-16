@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Review Blog</title>
+  <%- include('partials/head-assets') %>
+</head>
+<body>
+  <%- include('partials/public-header') %>
+
+  <main class="page">
+    <section class="hero">
+      <p class="hero-brand">Recipe Review Blog</p>
+      <h1>Tested recipes. Honest reviews.</h1>
+      <p class="hero-text">
+        Personally cooked dishes with clear ingredients, step-by-step instructions,
+        and a straightforward rating for each recipe.
+      </p>
+    </section>
+
+    <% if (posts.length === 0) { %>
+      <p class="empty-state">No recipes yet.</p>
+    <% } else { %>
+      <section class="recipe-grid" aria-label="Recipe list">
+        <% posts.forEach(function(post) { %>
+          <article class="recipe-card">
+            <h2><%= post.title %></h2>
+            <p class="meta">
+              <span class="rating">Rating: <%= post.rating %>/5</span>
+              <span class="date"><%= post.created_at %></span>
+            </p>
+            <p class="card-preview">
+              <%= post.review.length > 120 ? post.review.substring(0, 120) + '...' : post.review %>
+            </p>
+            <a class="btn btn-primary" href="/posts/<%= post.id %>">Read Recipe</a>
+          </article>
+        <% }); %>
+      </section>
+    <% } %>
+  </main>
+
+  <%- include('partials/public-footer') %>
+</body>
+</html>

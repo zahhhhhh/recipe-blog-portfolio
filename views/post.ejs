@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> | Recipe Review Blog</title>
+  <%- include('partials/head-assets') %>
+</head>
+<body>
+  <%- include('partials/public-header') %>
+
+  <main class="page page-narrow">
+    <p class="back-link-wrap">
+      <a class="btn btn-secondary" href="/">Back to Recipes</a>
+    </p>
+
+    <article class="recipe-article">
+      <header class="article-header">
+        <h1><%= post.title %></h1>
+        <p class="meta">
+          <span class="rating">Rating: <%= post.rating %>/5</span>
+          <span class="date">Published: <%= post.created_at %></span>
+        </p>
+      </header>
+
+      <section class="article-section">
+        <h2>Ingredients</h2>
+        <div class="content-block preserve-lines"><%= post.ingredients %></div>
+      </section>
+
+      <section class="article-section">
+        <h2>Preparation Instructions</h2>
+        <div class="content-block preserve-lines"><%= post.instructions %></div>
+      </section>
+
+      <section class="article-section review-section">
+        <h2>Author's Review</h2>
+        <p><%= post.review %></p>
+      </section>
+    </article>
+  </main>
+
+  <%- include('partials/public-footer') %>
+</body>
+</html>

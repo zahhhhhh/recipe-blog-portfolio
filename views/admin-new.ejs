@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Recipe | Recipe Review Blog</title>
+  <%- include('partials/head-assets') %>
+</head>
+<body class="admin-body">
+  <main class="admin-shell admin-shell-wide">
+    <div class="admin-nav">
+      <a class="text-link" href="/">← Back to Recipes</a>
+      <form action="/admin/logout" method="POST" class="logout-form">
+        <button class="btn btn-secondary" type="submit">Log out</button>
+      </form>
+    </div>
+
+    <section class="admin-card admin-card-wide">
+      <h1>Create Recipe</h1>
+      <p class="admin-lead">Add a tested recipe with ingredients, instructions, rating and review.</p>
+
+      <% if (error) { %>
+        <p class="error"><%= error %></p>
+      <% } %>
+
+      <form class="admin-form" action="/admin/new" method="POST">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" value="<%= form.title || '' %>" required>
+
+        <label for="ingredients">Ingredients</label>
+        <textarea id="ingredients" name="ingredients" rows="6" required><%= form.ingredients || '' %></textarea>
+
+        <label for="instructions">Instructions</label>
+        <textarea id="instructions" name="instructions" rows="8" required><%= form.instructions || '' %></textarea>
+
+        <label for="review">Review</label>
+        <textarea id="review" name="review" rows="4" required><%= form.review || '' %></textarea>
+
+        <label for="rating">Rating (1–5)</label>
+        <input class="rating-input" type="number" id="rating" name="rating" min="1" max="5" step="1" value="<%= form.rating || '' %>" required>
+
+        <button class="btn btn-primary" type="submit">Publish Recipe</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
