@@ -22,7 +22,7 @@
     <% if (posts.length === 0) { %>
       <p class="empty-state">No recipes yet.</p>
     <% } else { %>
-      <section class="recipe-grid" aria-label="Recipe list">
+      <section class="recipe-grid" id="recipe-grid" aria-label="Recipe list">
         <% posts.forEach(function(post) { %>
           <article class="recipe-card">
             <h2><%= post.title %></h2>
@@ -37,9 +37,24 @@
           </article>
         <% }); %>
       </section>
+
+      <% if (totalRecipes > posts.length) { %>
+        <div class="load-more-wrap">
+          <button type="button" class="btn btn-primary" id="load-more-btn"
+            data-offset="<%= posts.length %>"
+            data-total="<%= totalRecipes %>">
+            Load More Recipes
+          </button>
+          <p class="load-more-error" id="load-more-error" hidden></p>
+        </div>
+      <% } %>
     <% } %>
   </main>
 
   <%- include('partials/public-footer') %>
+
+  <% if (posts.length > 0 && totalRecipes > posts.length) { %>
+    <script src="/js/load-more.js"></script>
+  <% } %>
 </body>
 </html>

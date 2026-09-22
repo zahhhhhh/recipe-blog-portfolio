@@ -31,9 +31,9 @@ function requireAdmin(req, res, next) {
   return res.redirect('/admin/login');
 }
 
-// Homepage route – list all recipe posts
+// Homepage route – show the first 3 recipes
 app.get('/', (req, res) => {
-  const sql = 'SELECT * FROM posts ORDER BY created_at DESC';
+  const sql = 'SELECT * FROM posts ORDER BY created_at DESC LIMIT 3';
 
   db.all(sql, [], (err, posts) => {
     if (err) {
@@ -41,7 +41,49 @@ app.get('/', (req, res) => {
       return res.status(500).send('Error loading recipes.');
     }
 
-    res.render('index', { posts });
+    db.get('SELECT COUNT(*) AS total FROM posts', (countErr, row) => {
+      if (countErr) {
+        console.error(countErr.message);
+        return res.status(500).send('Error loading recipes.');
+      }
+
+      res.render('index', {
+        posts,
+        totalRecipes: row.total
+      });
+    });
+  });
+});
+
+// JSON API for Load More Recipes (AJAX)
+app.get('/api/recipes', (req, res) => {
+  const offset = parseInt(req.query.offset, 10);
+  const limit = parseInt(req.query.limit, 10);
+
+  const safeOffset = Number.isNaN(offset) || offset < 0 ? 0 : offset;
+  const safeLimit = Number.isNaN(limit) || limit < 1 ? 3 : Math.min(limit, 3);
+
+  const sql = 'SELECT * FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?';
+
+  db.all(sql, [safeLimit, safeOffset], (err, posts) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Error loading recipes.' });
+    }
+
+    db.get('SELECT COUNT(*) AS total FROM posts', (countErr, row) => {
+      if (countErr) {
+        console.error(countErr.message);
+        return res.status(500).json({ error: 'Error loading recipes.' });
+      }
+
+      res.json({
+        posts,
+        total: row.total,
+        offset: safeOffset,
+        limit: safeLimit
+      });
+    });
   });
 });
 
